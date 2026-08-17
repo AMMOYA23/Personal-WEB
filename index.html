@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to My Personal Website</title>
+    <style>
+        /* --- 1. CSS VARIABLES FOR LIGHT / DARK MODE --- */
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --card-bg: #1e1e1e;
+            --menus-bg: #1a1a1a;
+            --sidebar-bg: #181818;
+            --border-color: #333333;
+            --neon-glow: 0 0 25px #ff477e;
+            --accent-color: #ff477e;
+            --header-overlay: rgba(0, 40, 80, 0.85);
+            --menu-hover: linear-gradient(135deg, #ff477e, #118ab2);
+        }
+
+        .light-mode {
+            --bg-color: #f5f7fa;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --menus-bg: #ffffff;
+            --sidebar-bg: #eaeaea;
+            --border-color: #cccccc;
+            --neon-glow: 0 4px 15px rgba(0,0,0,0.15);
+            --accent-color: #004080;
+            --header-overlay: rgba(0, 64, 128, 0.85);
+            --menu-hover: linear-gradient(135deg, #004080, #0059b3);
+        }
+
+        /* Base Configuration */
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- 2. THE YOUTUBE LOADING SCREEN CSS --- */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #121212;
+            z-index: 9999; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .dots-container { display: flex; gap: 12px; margin-bottom: 25px; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; animation: bounce 0.5s infinite alternate; }
+        .dot:nth-child(1) { background-color: #ff477e; animation-delay: 0s; }
+        .dot:nth-child(2) { background-color: #06d6a0; animation-delay: 0.15s; }
+        .dot:nth-child(3) { background-color: #118ab2; animation-delay: 0.3s; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+        .loading-text { color: white; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-align: center; min-width: 200px; }
+        .progress-container { width: 220px; height: 8px; background-color: #333; border-radius: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #ff477e, #06d6a0, #118ab2); animation: loadProgress 4s forwards; }
+        @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
+
+        /* --- 3. FULL SCREEN CONTAINER --- */
+        .wrapper {
+            width: 100%; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column; 
+            background: var(--bg-color);
+        }
+
+        /* --- 4. LAB 3 REQUIRED IMAGE HEADER W/ TEXT OVERLAY --- */
+        .header-container {
+            position: relative; 
+            text-align: center;
+            color: white;
+        }
+        .header-image {
+            width: 100%;
+            height: 260px; 
+            object-fit: cover;
+            display: block;
+        }
+        .header-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            background-color: var(--header-overlay); 
+            padding: 20px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background-color 0.3s ease;
+        }
+        .header-text h1 {
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: 3px; 
+            font-size: 26px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .header-text p {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            color: #06d6a0; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 8px;
+        }
+
+        /* --- 5. LAB 3 REQUIRED MENUS SECTION (With Toggle built-in) --- */
+        .menus-section {
+            background-color: var(--menus-bg);
+            padding: 15px 50px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin: 0 auto; /* Centers the navigation buttons exactly */
+        }
+        .nav-links a {
+            padding: 10px 25px;
+            text-decoration: none; 
+            color: var(--text-color); 
+            font-weight: bold; 
+            font-size: 14px;
+            border-radius: 30px; /* Smooth corners */
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--menu-hover);
+            color: white !important;
+            box-shadow: 0 4px 10px rgba(255, 71, 126, 0.2);
+            border-color: transparent;
+        }
+        .theme-btn {
+            background: none; border: 2px solid var(--border-color); 
+            color: var(--text-color); padding: 8px 15px; border-radius: 20px;
+            cursor: pointer; font-weight: bold; font-size: 13px; transition: all 0.3s ease;
+        }
+        .theme-btn:hover { border-color: var(--accent-color); }
+
+        /* --- 6. CONTENT AREA (Split Layout) --- */
+        .content-area {
+            display: flex;
+            flex: 1; 
+        }
+        .side-content {
+            flex: 1;
+            max-width: 280px; 
+            background-color: var(--sidebar-bg);
+            padding: 40px; 
+            border-right: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+        .main-content {
+            flex: 3;
+            padding: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        /* Left Side Content Info block */
+        .hero-text-block {
+            flex: 1;
+            min-width: 300px;
+        }
+        .hero-text-block h2 { font-size: 34px; margin: 0 0 10px 0; font-weight: 800; }
+        .typing-container {
+            font-size: 18px; font-weight: bold; color: #06d6a0; margin-bottom: 20px;
+        }
+
+        /* COMPACT NEON LIVE CLOCK */
+        .clock-card {
+            background-color: #8fe3f4; 
+            color: #1a1a1a;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(3, 169, 244, 0.5);
+            border: 2px solid #03a9f4;
+            margin-bottom: 25px;
+        }
+        .time-display { font-size: 32px; font-weight: bold; font-family: 'Arial Black', sans-serif; }
+        .date-display { font-size: 13px; font-weight: bold; color: #2b5c66; margin-top: 5px; }
+
+        /* NEON GLOWING CIRCULAR IMAGE CONTAINER */
+        .hero-image-block {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 300px;
+        }
+        .glowing-circle-frame {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            padding: 5px;
+            border: 3px solid var(--accent-color);
+            box-shadow: var(--neon-glow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            animation: pulseGlow 3s infinite alternate;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .glowing-circle-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        @keyframes pulseGlow {
+            from { transform: scale(1); box-shadow: var(--neon-glow); }
+            to { transform: scale(1.02); box-shadow: 0 0 40px var(--accent-color); }
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: var(--menus-bg);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="dots-container"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="loading-text" id="loadingText">Loading...</div>
+        <div class="progress-container"><div class="progress-bar"></div></div>
+    </div>
+
+    <!-- MAIN WEBSITE CONTAINER -->
+    <div class="wrapper">
+        
+        <!-- LAB 3 REQUIREMENT: BANNER IMAGE HEADER WITH TEXT POSITIONED OVER IT -->
+        <div class="header-container">
+            <img src="backdrop.avif" alt="Header Background" class="header-image">
+            <div class="header-text">
+                <h1>Welcome to</h1>
+                <p>My Personal Website</p>
+            </div>
+        </div>
+
+        <!-- LAB 3 REQUIREMENT: MENUS SECTION -->
+        <div class="menus-section">
+            <div class="nav-links">
+                <a href="index.html" class="active">HOME</a>
+                <a href="profile.html">PROFILE</a>
+                <a href="contacts.html">CONTACTS</a>
+                <a href="calculator.html">CALCULATOR</a>
+            </div>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+        </div>
+
+        <!-- LAB 3 REQUIREMENT: CONTENT SPLIT AREA -->
+        <div class="content-area">
+            
+            <div class="side-content">
+                <h3>Menu Content</h3>
+                <br>
+                <p>Welcome to my portfolio hub. Use the links above to discover my interactive features.</p>
+            </div>
+
+            <div class="main-content">
+                <!-- LEFT BLOCK CONTENT Info -->
+                <div class="hero-text-block">
+                    <h2>Hi, I'm Moises</h2>
+                    <div class="typing-container">Information Technology Student 💻</div>
+                    
+                    <!-- COMPACT TICKING DIGITAL CLOCK WIDGET -->
+                    <div class="clock-card">
+                        <div class="time-display" id="clockTime">00:00:00 AM</div>
+                        <div class="date-display" id="clockDate">Loading Date...</div>
+                    </div>
+                    
+                    <p style="line-height: 1.6; margin-top: 10px;">Welcome to my personal website! This website is a Lab Ativity to be passed to our Mr. Pogi instructor Mark Joseph Asucion.</p>
+                </div>
+
+                <!-- RIGHT BLOCK CONTENT Profile Media Frame -->
+                <div class="hero-image-block">
+                    <div class="glowing-circle-frame">
+                        <img src="travis.jpg" alt="Welcome Presentation Media Profile Graphic">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- LAB 3 REQUIREMENT: FOOTER -->
+        <div class="footer">
+            <p>&copy; 2026 Moises G. Ammoya Jr.</p>
+        </div>
+
+    </div>
+
+    <!-- 1. Real-Time Ticking Digital Clock Script -->
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            document.getElementById('clockTime').textContent = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            
+            const options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('clockDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+
+    <!-- 2. Light / Dark Mode Toggle Functionality -->
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            body.classList.toggle('light-mode');
+            
+            if(body.classList.contains('light-mode')) {
+                btn.textContent = "🌙 Dark Mode";
+                localStorage.setItem('preferredTheme', 'light');
+            } else {
+                btn.textContent = "☀️ Light Mode";
+                localStorage.setItem('preferredTheme', 'dark');
+            }
+        }
+
+        if(localStorage.getItem('preferredTheme') === 'light') {
+            document.body.classList.add('light-mode');
+            document.getElementById('themeBtn').textContent = "🌙 Dark Mode";
+        }
+    </script>
+
+    <!-- 3. Smart Loading Screen & Alert Memory Logic -->
+    <script>
+        const loader = document.getElementById('loader');
+        
+        if (sessionStorage.getItem('siteAlreadyLoaded') === 'true') {
+            loader.style.display = 'none';
+        } else {
+            sessionStorage.setItem('siteAlreadyLoaded', 'true');
+            const texts = ["Loading...", "Grabbing snacks 🍕", "Finding WiFi 📡", "Almost there ⏳"];
+            let textIndex = 0;
+            const textElement = document.getElementById("loadingText");
+            
+            const textInterval = setInterval(() => { 
+                textIndex++; 
+                if (textIndex < texts.length) {
+                    textElement.textContent = texts[textIndex]; 
+                }
+            }, 900);
+
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    clearInterval(textInterval);
+                    loader.style.opacity = '0'; 
+                    
+                    setTimeout(() => { 
+                        loader.style.display = 'none'; 
+                        alert("Hello! This is my personal webpage.\nThank you for visiting.");
+                    }, 500);
+                    
+                }, 4000);
+            });
+        }
+    </script>
+
+</body>
+</html>

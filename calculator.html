@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Calculator - My Personal Website</title>
+    <style>
+        /* --- 1. THEME VARIABLES (LIGHT & DARK MODE) --- */
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --card-bg: #1e1e1e;
+            --menus-bg: #1a1a1a;
+            --sidebar-bg: #181818;
+            --border-color: #333333;
+            --neon-glow: 0 0 25px #ff477e;
+            --accent-color: #ff477e;
+            --header-overlay: rgba(18, 18, 18, 0.85);
+            --menu-hover: linear-gradient(135deg, #ff477e, #118ab2);
+            --calc-container-bg: #1e1e1e;
+            --calc-input-bg: #2d2d2d;
+            --calc-input-border: #444444;
+            --calc-text: #ffffff;
+        }
+
+        .light-mode {
+            --bg-color: #f5f7fa;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --menus-bg: #ffffff;
+            --sidebar-bg: #eaeaea;
+            --border-color: #cccccc;
+            --neon-glow: 0 4px 15px rgba(0,0,0,0.15);
+            --accent-color: #004080;
+            --header-overlay: rgba(0, 64, 128, 0.85);
+            --menu-hover: linear-gradient(135deg, #004080, #0059b3);
+            --calc-container-bg: #eaeaea;
+            --calc-input-bg: #ffffff;
+            --calc-input-border: #cccccc;
+            --calc-text: #1a1a1a;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- 2. FULL SCREEN CONTAINER --- */
+        .wrapper {
+            width: 100%; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column; 
+            background: var(--bg-color);
+        }
+
+        /* --- 3. REQUIRED LAB 3 IMAGE HEADER BANNER --- */
+        .header-container {
+            position: relative; 
+            text-align: center;
+            color: white;
+        }
+        .header-image {
+            width: 100%;
+            height: 280px; 
+            object-fit: cover;
+            display: block;
+        }
+        .header-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            background-color: var(--header-overlay); 
+            padding: 22px 45px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background-color 0.3s ease;
+        }
+        .header-text h1 {
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: 4px; 
+            font-size: 28px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+        }
+        .header-text p {
+            margin: 10px 0 0 0;
+            font-size: 14px;
+            color: #06d6a0; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 10px;
+        }
+
+        /* --- 4. REQUIRED LAB 3 MENUS SECTION --- */
+        .menus-section {
+            background-color: var(--menus-bg);
+            padding: 15px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
+        }
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            margin: 0 auto; 
+        }
+        .nav-links a {
+            padding: 10px 25px;
+            text-decoration: none; 
+            color: var(--text-color); 
+            font-weight: bold; 
+            font-size: 14px;
+            border-radius: 30px; 
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--menu-hover);
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(255, 71, 126, 0.25);
+            border-color: transparent;
+        }
+        .theme-btn {
+            background: none; border: 2px solid var(--border-color); 
+            color: var(--text-color); padding: 8px 18px; border-radius: 20px;
+            cursor: pointer; font-weight: bold; font-size: 13px; transition: all 0.3s ease;
+        }
+        .theme-btn:hover { border-color: var(--accent-color); }
+
+        /* --- 5. SPLIT CONTENT STRUCTURE --- */
+        .content-area {
+            display: flex;
+            flex: 1; 
+        }
+        .side-content {
+            flex: 1;
+            max-width: 280px; 
+            background-color: var(--sidebar-bg);
+            padding: 40px; 
+            border-right: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+        .main-content {
+            flex: 3;
+            padding: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centered the calculator perfectly now that the image is gone */
+            gap: 50px;
+        }
+
+        /* --- DETAILED GRID CALCULATOR DESIGN --- */
+        .calc-container { 
+            background-color: var(--calc-container-bg); 
+            padding: 30px; 
+            border-radius: 15px; 
+            border: 1px solid var(--border-color); 
+            width: 100%; 
+            max-width: 500px; 
+            text-align: center; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .calc-container h2 { margin-bottom: 25px; color: var(--text-color); }
+        
+        .input-group { display: flex; justify-content: space-between; margin-bottom: 25px; }
+        .input-group input { 
+            width: 45%; 
+            padding: 12px; 
+            background-color: var(--calc-input-bg);
+            color: var(--calc-text);
+            border: 2px solid var(--calc-input-border); 
+            border-radius: 8px; 
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-group input:focus { border-color: var(--accent-color); }
+
+        .button-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .button-group button { padding: 15px; border: none; border-radius: 30px; color: white; cursor: pointer; font-weight: bold; font-size: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); transition: all 0.2s ease-in-out; }
+        .button-group button:hover, .btn-clear:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.25); }
+        
+        .btn-add { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-sub { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #333 !important; }
+        .btn-div { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #333 !important; }
+        .btn-mul { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #333 !important; }
+
+        .result-group { display: flex; justify-content: space-between; align-items: center; }
+        #result { 
+            width: 65%; 
+            padding: 15px; 
+            background-color: var(--calc-input-bg);
+            color: var(--calc-text);
+            border: 2px solid var(--calc-input-border); 
+            border-radius: 8px; 
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-clear { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); padding: 15px 25px; border: none; border-radius: 30px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.15); transition: all 0.2s ease-in-out; width: 30%; }
+
+        /* --- 6. REQUIRED LAB 3 FOOTER --- */
+        .footer {
+            background-color: var(--menus-bg);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        
+        <div class="header-container">
+            <img src="backdrop.avif" alt="Header Background" class="header-image">
+            <div class="header-text">
+                <h1>Welcome to</h1>
+                <p>My Personal Website</p>
+            </div>
+        </div>
+
+        <div class="menus-section">
+            <div class="nav-links">
+                <a href="index.html">HOME</a>
+                <a href="profile.html">PROFILE</a>
+                <a href="contacts.html">CONTACTS</a>
+                <a href="calculator.html" class="active">CALCULATOR</a>
+            </div>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+        </div>
+
+        <div class="content-area">
+            <div class="side-content">
+                <h3>Menu Content</h3>
+                <br>
+                <p>Use the computing terminal grid widget to handle mathematical operations dynamically.</p>
+            </div>
+
+            <div class="main-content">
+                <div class="calc-container">
+                    <h2>Simple calculator</h2>
+                    
+                    <div class="input-group">
+                        <input type="number" id="num1" placeholder="NUMBER e.g. 1337">
+                        <input type="number" id="num2" placeholder="NUMBER e.g. 2108">
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-add" onclick="calculate('+')">+ Add</button>
+                        <button class="btn-sub" onclick="calculate('-')">- Subtract</button>
+                        <button class="btn-div" onclick="calculate('/')">/ Divide</button>
+                        <button class="btn-mul" onclick="calculate('*')">* Multiply</button>
+                    </div>
+
+                    <div class="result-group">
+                        <input type="text" id="result" placeholder="Result" readonly>
+                        <button class="btn-clear" onclick="clearFields()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 Moises G. Ammoya Jr.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Calculator Logic
+        function calculate(operator) {
+            let num1 = parseFloat(document.getElementById('num1').value);
+            let num2 = parseFloat(document.getElementById('num2').value);
+            let resultBox = document.getElementById('result');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                resultBox.value = "Please enter numbers";
+                return;
+            }
+
+            let compute;
+            if (operator === '+') compute = num1 + num2;
+            else if (operator === '-') compute = num1 - num2;
+            else if (operator === '/') compute = num1 / num2;
+            else if (operator === '*') compute = num1 * num2;
+
+            resultBox.value = compute;
+        }
+
+        function clearFields() {
+            document.getElementById('num1').value = '';
+            document.getElementById('num2').value = '';
+            document.getElementById('result').value = '';
+        }
+
+        // Light / Dark Mode Toggle Script
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            body.classList.toggle('light-mode');
+            
+            if(body.classList.contains('light-mode')) {
+                btn.textContent = "🌙 Dark Mode";
+                localStorage.setItem('preferredTheme', 'light');
+            } else {
+                btn.textContent = "☀️ Light Mode";
+                localStorage.setItem('preferredTheme', 'dark');
+            }
+        }
+
+        if(localStorage.getItem('preferredTheme') === 'light') {
+            document.body.classList.add('light-mode');
+            document.getElementById('themeBtn').textContent = "🌙 Dark Mode";
+        }
+    </script>
+
+</body>
+</html>
